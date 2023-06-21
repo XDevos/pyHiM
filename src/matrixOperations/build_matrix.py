@@ -34,7 +34,6 @@ import os
 import re
 import sys
 import uuid
-
 # to remove in a future version
 import warnings
 
@@ -46,17 +45,12 @@ from sklearn.metrics import pairwise_distances
 from tqdm import trange
 from tqdm.contrib import tzip
 
-from fileProcessing.fileManagement import (
-    get_dictionary_value,
-    print_log,
-)
+from fileProcessing.fileManagement import get_dictionary_value, print_log
 from matrixOperations.build_traces import initialize_module
 from matrixOperations.chromatin_trace_table import ChromatinTraceTable
 from matrixOperations.HIMmatrixOperations import (
-    calculate_contact_probability_matrix,
-    plot_distance_histograms,
-    plot_matrix,
-)
+    calculate_contact_probability_matrix, plot_distance_histograms,
+    plot_matrix)
 
 warnings.filterwarnings("ignore")
 

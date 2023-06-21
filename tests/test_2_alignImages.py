@@ -8,12 +8,14 @@ Created on Thu Sep 17 13:33:49 2020
 
 
 import os
+
 import pytest
 
-from fileProcessing.fileManagement import (
-    Session, load_json,Parameters,Folders)
+from fileProcessing.fileManagement import (Folders, Parameters, Session,
+                                           load_json)
+from fileProcessing.functionCaller import (HiMFunctionCaller,
+                                           him_parse_arguments)
 
-from fileProcessing.functionCaller import HiMFunctionCaller, him_parse_arguments
 
 def test_alignImages():
 

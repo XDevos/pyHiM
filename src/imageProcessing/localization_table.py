@@ -15,7 +15,6 @@ This class will contain methods to load, save, plot barcode localizations and st
 
 import os
 import sys
-
 # to remove in a future version
 import warnings
 

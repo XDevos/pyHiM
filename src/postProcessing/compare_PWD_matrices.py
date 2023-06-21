@@ -22,10 +22,9 @@ import argparse
 import select
 import sys
 
+import matplotlib.pyplot as plt
 import numpy as np
-
 import scipy.stats
-import matplotlib.pyplot as plt     
 import seaborn as sns
 
 # =============================================================================

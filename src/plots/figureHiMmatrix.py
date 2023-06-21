@@ -30,27 +30,19 @@ Left to do:
 import argparse
 import csv
 import json
-
 #%% imports and plotting settings
-import os, sys
+import os
+import sys
 
 import matplotlib.gridspec as gridspec
-
 # import matplotlib as plt
 import matplotlib.pyplot as plt
 import numpy as np
 
 from matrixOperations.HIMmatrixOperations import (
-    AnalysisHiMMatrix,
-    calculate_ensemble_pwd_matrix,
-    list_sc_to_keep,
-    normalize_matrix,
-    plot_distance_histograms,
-    plot_matrix,
-    plot_scalogram,
-    shuffle_matrix,
-    calculate_contact_probability_matrix,
-)
+    AnalysisHiMMatrix, calculate_contact_probability_matrix,
+    calculate_ensemble_pwd_matrix, list_sc_to_keep, normalize_matrix,
+    plot_distance_histograms, plot_matrix, plot_scalogram, shuffle_matrix)
 
 #%% define and loads datasets
 

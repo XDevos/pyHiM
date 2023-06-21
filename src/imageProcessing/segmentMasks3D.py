@@ -27,21 +27,15 @@ import numpy as np
 from skimage import io
 from skimage.measure import regionprops
 
-from fileProcessing.fileManagement import (
-    Folders,
-    get_dictionary_value,
-    load_alignment_dictionary,
-    print_dict,
-    print_log,
-    retrieve_number_rois_folder,
-    write_string_to_file,
-)
-from imageProcessing.imageProcessing import (
-    _segment_3d_masks,
-    apply_xy_shift_3d_images,
-    plot_raw_images_and_labels,
-    reinterpolate_z,
-)
+from fileProcessing.fileManagement import (Folders, get_dictionary_value,
+                                           load_alignment_dictionary,
+                                           print_dict, print_log,
+                                           retrieve_number_rois_folder,
+                                           write_string_to_file)
+from imageProcessing.imageProcessing import (_segment_3d_masks,
+                                             apply_xy_shift_3d_images,
+                                             plot_raw_images_and_labels,
+                                             reinterpolate_z)
 
 # =============================================================================
 # CLASSES

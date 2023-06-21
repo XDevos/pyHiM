@@ -60,16 +60,15 @@ import os
 import select
 import sys
 from datetime import datetime
-from astropy.io import ascii
 
 import numpy as np
+from astropy.io import ascii
+from pdbparser.pdbparser import pdbparser
 
+from fileProcessing.fileManagement import create_folder, loads_barcode_dict
 from imageProcessing.imageProcessing import Image
 from matrixOperations.chromatin_trace_table import ChromatinTraceTable
 from matrixOperations.HIMmatrixOperations import write_xyz_2_pdb
-from fileProcessing.fileManagement import create_folder, loads_barcode_dict
-
-from pdbparser.pdbparser import pdbparser
 
 # =============================================================================
 # FUNCTIONS

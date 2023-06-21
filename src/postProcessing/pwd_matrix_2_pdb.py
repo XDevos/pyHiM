@@ -17,25 +17,18 @@ import os
 import select
 import sys
 
+import matplotlib.pyplot as plt
 import numpy as np
-
-from imageProcessing.imageProcessing import Image
+import numpy.linalg as npl
+from mpl_toolkits.mplot3d import Axes3D
 from pdbparser.pdbparser import pdbparser
 
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-
-import numpy.linalg as npl
-
-from matrixOperations.HIMmatrixOperations import (
-    write_xyz_2_pdb,
-    distances_2_coordinates,
-    coord_2_distances,
-    calculate_ensemble_pwd_matrix,
-)
 from fileProcessing.fileManagement import create_folder, loads_barcode_dict
-
+from imageProcessing.imageProcessing import Image
 from matrixOperations.chromatin_trace_table import ChromatinTraceTable
+from matrixOperations.HIMmatrixOperations import (
+    calculate_ensemble_pwd_matrix, coord_2_distances, distances_2_coordinates,
+    write_xyz_2_pdb)
 
 
 def parse_arguments():

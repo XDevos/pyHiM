@@ -6,9 +6,11 @@ Created on Thu Sep 17 16:42:53 2020
 @author: marcnol
 """
 
-import os, argparse
-from fileProcessing.fileManagement import (
-    Session, Parameters,Folders,save_json)
+import argparse
+import os
+
+from fileProcessing.fileManagement import (Folders, Parameters, Session,
+                                           save_json)
 
 #%% defines data folder
 

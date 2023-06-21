@@ -22,6 +22,7 @@ import os
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.linalg as npl
 from astropy.table import Table, vstack
 from numba import jit
 from pylab import colorbar, contourf
@@ -31,8 +32,6 @@ from sklearn import manifold
 from sklearn.model_selection import GridSearchCV, LeaveOneOut
 from sklearn.neighbors import KernelDensity
 from tqdm import trange
-
-import numpy.linalg as npl
 
 from fileProcessing.fileManagement import is_notebook, write_string_to_file
 

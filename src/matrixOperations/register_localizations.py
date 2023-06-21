@@ -18,7 +18,6 @@ Remember that global alignments have already been corrected.
 import glob
 import os
 import sys
-
 # to remove in a future version
 import warnings
 
@@ -26,7 +25,8 @@ import numpy as np
 from astropy.table import Table
 from tqdm import trange
 
-from fileProcessing.fileManagement import Folders, print_log, write_string_to_file
+from fileProcessing.fileManagement import (Folders, print_log,
+                                           write_string_to_file)
 from imageProcessing.localization_table import LocalizationTable
 from matrixOperations.filter_localizations import get_file_table_new_name
 

@@ -19,6 +19,7 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.optimize as spo
+from apifish.stack import projection
 from astropy.convolution import Gaussian2DKernel
 from astropy.stats import SigmaClip
 from astropy.visualization import SqrtStretch, simple_norm
@@ -28,7 +29,8 @@ from csbdeep.utils import normalize
 from csbdeep.utils.tf import limit_gpu_memory
 from matplotlib import ticker
 from numpy import linalg as LA
-from photutils import Background2D, MedianBackground, deblend_sources, detect_sources
+from photutils import (Background2D, MedianBackground, deblend_sources,
+                       detect_sources)
 from scipy import ndimage as ndi
 from scipy.ndimage import shift as shift_image
 from skimage import color, exposure, io, measure
@@ -39,14 +41,12 @@ from skimage.registration import phase_cross_correlation
 from skimage.segmentation import watershed
 from skimage.util.apply_parallel import apply_parallel
 from skimage.util.shape import view_as_blocks
+from stardist import random_label_cmap
 from stardist.models import StarDist3D
 from tifffile import imsave
 from tqdm import tqdm, trange
-from stardist import random_label_cmap
 
 from fileProcessing.fileManagement import print_log, try_get_client
-
-from apifish.stack import projection
 
 warnings.filterwarnings("ignore")
 

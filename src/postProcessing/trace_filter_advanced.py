@@ -20,21 +20,22 @@ will analyze 'Trace.ecsv' and remove traces with
 
 """
 
-import matplotlib
+import argparse
 import os
+import select
+import sys
+import uuid
+from glob import glob
+
+import matplotlib
 import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
-import uuid
+from astropy.io import ascii
+from astropy.table import Table
 from sklearn.metrics import pairwise_distances
 from sklearn.neighbors import KDTree
 from tqdm import tqdm
-from astropy.io import ascii
-from astropy.table import Table
-from glob import glob
-import sys
-import select
-import argparse
 
 #matplotlib.use('TkAgg')
 

@@ -21,18 +21,18 @@ Planned features:
 # IMPORTS
 # =============================================================================q
 
-import numpy as np
-import os, sys
-import json
-from datetime import datetime
 import argparse
+import collections
 import csv
 import glob
+import json
+import os
 import select
+import sys
+from datetime import datetime
 
-import collections
-import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 
 from imageProcessing.imageProcessing import Image

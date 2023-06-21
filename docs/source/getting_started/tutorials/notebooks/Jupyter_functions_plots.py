@@ -6,17 +6,19 @@ Created on Thu Mar 17 14:55:21 2022
 @author: Olivier Messina
 """
 
-import os                             
-from IPython.display import Image     
-from IPython.core.display import HTML 
-import matplotlib.pyplot as plt       
-import matplotlib.image as mpimg      
-from matplotlib import rcParams 
-from tifffile import TiffWriter 
-import numpy as np
-from glob import glob
-import glob 
+import glob
+import os
 import shutil
+from glob import glob
+
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+import numpy as np
+from IPython.core.display import HTML
+from IPython.display import Image
+from matplotlib import rcParams
+from tifffile import TiffWriter
+
 
 def copy_localization_table(Input_folder):
     source = Input_folder+"/segmentedObjects/segmentedObjects_3D_barcode_original.dat"

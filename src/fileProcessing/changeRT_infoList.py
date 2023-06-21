@@ -22,7 +22,6 @@ import sys
 
 
 def main():
-
     labels_to_process = [
         {"label": "fiducial", "parameterFile": "infoList_fiducial.json"},
         {"label": "barcode", "parameterFile": "infoList_barcode.json"},

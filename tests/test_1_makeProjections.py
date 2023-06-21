@@ -7,11 +7,11 @@ Created on Thu Sep 17 10:08:51 2020
 """
 
 import os
+
 import pytest
 
-from fileProcessing.fileManagement import (
-    Session, Parameters,Folders,load_json)
-
+from fileProcessing.fileManagement import (Folders, Parameters, Session,
+                                           load_json)
 from fileProcessing.functionCaller import HiMFunctionCaller
 
 

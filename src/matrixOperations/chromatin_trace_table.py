@@ -17,19 +17,16 @@ trace table management class
 import os
 import sys
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from apifish.stack.io import read_table_from_ecsv, save_table_to_ecsv
 from astropy.table import Table, vstack
 from stardist import random_label_cmap
-import matplotlib
 
 from fileProcessing.fileManagement import print_log
-from imageProcessing.localization_table import (
-    build_color_dict,
-    decode_rois,
-    plots_localization_projection,
-)
+from imageProcessing.localization_table import (build_color_dict, decode_rois,
+                                                plots_localization_projection)
 
 lbl_cmap = random_label_cmap()
 font = {"weight": "normal", "size": 18}

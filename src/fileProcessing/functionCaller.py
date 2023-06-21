@@ -12,14 +12,9 @@ import logging
 import os
 from datetime import datetime
 
-from fileProcessing.fileManagement import (
-    DaskCluster,
-    Log,
-    Session,
-    print_dict,
-    print_log,
-    write_string_to_file,
-)
+from fileProcessing.fileManagement import (DaskCluster, Log, Session,
+                                           print_dict, print_log,
+                                           write_string_to_file)
 from imageProcessing.alignImages import align_images, apply_registrations
 from imageProcessing.alignImages3D import Drift3D
 from imageProcessing.makeProjections import make_projections

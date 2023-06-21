@@ -17,14 +17,14 @@ __version__ = "0.7.2"
 
 import os
 import sys
-import apifish
-
 # to remove in a future version
 import warnings
 from datetime import datetime
 
-from fileProcessing.fileManagement import Parameters, print_log
+import apifish
+
 import fileProcessing.functionCaller as fc
+from fileProcessing.fileManagement import Parameters, print_log
 
 warnings.filterwarnings("ignore")
 
