@@ -211,8 +211,24 @@ class Parameters:
     def __init__(self, root_folder="./", label="", file_name="infoList.json", stardist_basename = None):
         self.file_name = file_name
         self.label = label
-        self.param_file = "infoList_model.json"
+        self.param_file = root_folder + os.sep + file_name
         self.files_to_process = []
+        self.param_dict = {}
+
+        self.initialize_standard_parameters()
+        self.convert_parameter_file(self.param_file, self.label)
+        if stardist_basename is not None :
+            self.param_dict["segmentedObjects"]["stardist_basename"] = stardist_basename
+        self.param_dict["rootFolder"] = root_folder
+        self.file_parts = {}
+
+    def get_param_section(self, param_section=""):
+        if not param_section:
+            return self.param_dict
+        else:
+            return self.param_dict[param_section]
+
+    def initialize_standard_parameters(self):
         self.param_dict = {
             "common": {
                 "acquisition": {
@@ -277,7 +293,7 @@ class Parameters:
                         "contact": "coolwarm",
                         "Nmatrix": "Blues",
                     },  # colormaps used for plotting matrices
-                    "toleranceDrift": 1,  # tolerance used for block drift correction, in px
+                    "toleranceDrift": [3,1,1],  # zxy tolerance used for block drift correction, in px
                     "remove_uncorrected_localizations": True,  # if True it will removed uncorrected localizations, otherwise they will remain uncorrectd.
                 },
                 "segmentedObjects": {
@@ -330,24 +346,6 @@ class Parameters:
                 "RNA": {"order": 4},
             },
         }
-        self.initialize_standard_parameters()
-        self.param_file = root_folder + os.sep + file_name
-        self.convert_parameter_file(self.param_file, self.label)
-        if stardist_basename is not None :
-            self.param_dict["segmentedObjects"]["stardist_basename"] = stardist_basename
-        self.param_dict["rootFolder"] = root_folder
-        self.file_parts = {}
-
-    def get_param_section(self, param_section=""):
-        if not param_section:
-            return self.param_dict
-        else:
-            return self.param_dict[param_section]
-
-    def initialize_standard_parameters(self):
-        with open(self.param_file, mode="w", encoding="utf-8") as f:
-            json.dump(self.param_dict, f, ensure_ascii=False, sort_keys=True, indent=4)
-        print(f"$ Model parameters file saved to: {os.getcwd()+os.sep+self.param_file}")
 
     def convert_parameter_file(self, param_file, label_selected):
         param_from_file = load_parameters_file(param_file)
@@ -856,3 +854,33 @@ def get_dictionary_value(dictionary, key, default=""):
         value = default
 
     return value
+
+
+def create_folder(folder_path):
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+        print(f"Folder '{folder_path}' created successfully.")
+    else:
+        print(f"Folder '{folder_path}' already exists.")
+
+
+def loads_barcode_dict(file_name):
+    import json
+
+    # Check if the file exists
+    if not os.path.exists(file_name):
+        print("File does not exist")
+        return dict()
+    else:
+
+        # Opening JSON file
+        f = open(file_name)
+    
+        # returns JSON object as a dictionary
+        barcode_type = json.load(f)
+    
+        # Closing file
+        f.close()
+    
+        print("$ {} barcode dictionary loaded")
+        return barcode_type

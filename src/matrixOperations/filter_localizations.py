@@ -9,7 +9,7 @@ Created on Mon Feb  7 16:45:44 2022
 # IMPORTS
 # =============================================================================
 
-import glob
+import glob, os
 
 # to remove in a future version
 import warnings
@@ -154,8 +154,6 @@ class FilterLocalizations:
 
         Returns
         -------
-        self.tolerance_drift : float
-            tolerance to keep barcode localization, in pixel units
         self.block_size : int
             size of blocks used for blockAlignment.
         self.flux_min : float
@@ -168,16 +166,6 @@ class FilterLocalizations:
         else:
             self.flux_min = 0
             print_log("# Flux min not found. Set to {}!".format(self.flux_min))
-
-        if "toleranceDrift" in self.current_param.param_dict["buildsPWDmatrix"]:
-            self.tolerance_drift = self.current_param.param_dict["buildsPWDmatrix"][
-                "toleranceDrift"
-            ]
-        else:
-            self.tolerance_drift = 1
-            print_log(
-                "# toleranceDrift not found. Set to {}!".format(self.tolerance_drift)
-            )
 
         if "blockSize" in self.current_param.param_dict["alignImages"]:
             self.block_size = self.current_param.param_dict["alignImages"]["blockSize"]
@@ -226,7 +214,7 @@ class FilterLocalizations:
 
                 for file in files:
 
-                    if "3D" in file:
+                    if "3D" in os.path.basename(file):
                         self.ndims = 3
                     else:
                         self.ndims = 2

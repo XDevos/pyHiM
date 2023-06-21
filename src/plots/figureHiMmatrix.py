@@ -93,6 +93,10 @@ def parse_arguments():
         "--matrix_norm_mode",
         help="Matrix normalization mode. Can be n_cells (default) or nonNANs",
     )
+    parser.add_argument(
+        "--scalingParameter",
+        help="Scaling parameter. Dafault: 1",
+    )
 
     args = parser.parse_args()
 
@@ -136,16 +140,6 @@ def parse_arguments():
         run_parameters["axisLabel"] = args.axisLabel
     else:
         run_parameters["axisLabel"] = False
-
-    if args.axisTicks:
-        run_parameters["axisTicks"] = args.axisTicks
-    else:
-        run_parameters["axisTicks"] = False
-
-    if args.barcodes:
-        run_parameters["barcodes"] = args.barcodes
-    else:
-        run_parameters["barcodes"] = False
 
     if args.scalingParameter:
         run_parameters["scalingParameter"] = float(args.scalingParameter)
@@ -196,6 +190,13 @@ def parse_arguments():
             "matrix_norm_mode"
         ] = "n_cells"  # norm: n_cells (default), nonNANs
 
+    if args.scalingParameter:
+        run_parameters["scalingParameter"] = args.scalingParameter
+    else:
+        run_parameters["scalingParameter"] = 1
+
+
+
     return run_parameters
 
 
@@ -210,7 +211,7 @@ def main():
 
     print(">>> Producing HiM matrix")
 
-    run_parameters = parseArguments()
+    run_parameters = parse_arguments()
 
     if os.path.exists(run_parameters["scPWDMatrix_filename"]):
         sc_matrix = np.load(run_parameters["scPWDMatrix_filename"])
@@ -255,7 +256,8 @@ def main():
     outputFileName = (
         run_parameters["outputFolder"]
         + os.sep
-        + "Fig_HiMmatrix"
+        + "Fig_"
+        + os.path.basename(run_parameters["scPWDMatrix_filename"]).split('.')[0]
         + "_label:"
         + run_parameters["label"]
         + "_action:"
@@ -267,10 +269,11 @@ def main():
         index = range(sc_matrix.shape[0])
     else:
         index = [int(i) for i in run_parameters["shuffle"].split(",")]
-        sc_matrix = shuffleMatrix(sc_matrix, index)
+        sc_matrix = shuffle_matrix(sc_matrix, index)
 
     if run_parameters["dist_calc_mode"] == "proximity":
         # calculates and plots contact probability matrix from merged samples/datasets
+        print('$ calculating proximity matrix')
         sc_matrix, n_cells = calculate_contact_probability_matrix(
             sc_matrix,
             uniqueBarcodes,
@@ -287,7 +290,7 @@ def main():
         + str(run_parameters["cScale"])
     )
 
-    meansc_matrix = plotMatrix(
+    meansc_matrix = plot_matrix(
         sc_matrix,
         uniqueBarcodes,
         run_parameters["pixelSize"],
@@ -297,11 +300,11 @@ def main():
         figtitle="Map: " + run_parameters["dist_calc_mode"],
         mode=run_parameters["dist_calc_mode"],  # median or KDE
         clim=cScale,
-        cMin=run_parameters["cMin"],
+        c_min=run_parameters["cMin"],
         n_cells=n_cells,
-        cm=run_parameters["cmap"],
+        c_m=run_parameters["cmap"],
         cmtitle="distance, um",
-        fileNameEnding=fileNameEnding + run_parameters["plottingFileExtension"],
+        filename_ending=fileNameEnding + run_parameters["plottingFileExtension"],
     )
     print("Output figure: {}".format(outputFileName))
 

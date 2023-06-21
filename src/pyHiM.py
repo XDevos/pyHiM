@@ -8,11 +8,16 @@ Created on Sat Apr  4 09:11:01 2020
 This file contains routines to process Hi-M datasets
 
 """
+
+__version__ = "0.7.2"
+
 # =============================================================================
 # IMPORTS
 # =============================================================================
 
 import os
+import sys
+import apifish
 
 # to remove in a future version
 import warnings
@@ -24,6 +29,7 @@ import fileProcessing.functionCaller as fc
 warnings.filterwarnings("ignore")
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+
 
 
 # =============================================================================
@@ -138,4 +144,7 @@ def main(command_line_arguments=None):
 
 
 if __name__ == "__main__":
-    main()
+    if apifish.__version__ < "0.6.4dev" :
+        sys.exit("ERROR: Please update apifish (git checkout development && git pull)")
+    else:
+        main()

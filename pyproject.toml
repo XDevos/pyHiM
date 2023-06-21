@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyhim"
-version = "0.7.0"
+version = "0.7.1"
 description = "Pipeline and functions to analyse multiplexed DNA-FISH data"
 readme = "README.md"
 authors = [{ name = "Marcelo Nollmann", email = "marcelo.nollmann@cbs.cnrs.fr" }]
@@ -30,7 +30,7 @@ dependencies = ["apifish",
                 "astropy >= 4.3.1",
                 "csbdeep >= 0.6.3",
                 "dask[distributed] >= 2021.10.0",
-                "matplotlib >= 3.5.1",
+                "matplotlib == 3.5.1",
                 "numba >= 0.54.1",
                 "numpy >= 1.19.5",
                 "opencv-python >= 4.5.3.56",
