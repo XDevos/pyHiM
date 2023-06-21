@@ -36,6 +36,7 @@ import os
 import re
 import sys
 import uuid
+
 # to remove in a future version
 import warnings
 
@@ -47,11 +48,12 @@ from sklearn.metrics import pairwise_distances
 from tqdm import trange
 from tqdm.contrib import tzip
 
-from fileProcessing.fileManagement import (Folders, print_log,
-                                           write_string_to_file)
+from fileProcessing.fileManagement import Folders, print_log, write_string_to_file
 from matrixOperations.HIMmatrixOperations import (
-    calculate_contact_probability_matrix, plot_distance_histograms,
-    plot_matrix)
+    calculate_contact_probability_matrix,
+    plot_distance_histograms,
+    plot_matrix,
+)
 
 warnings.filterwarnings("ignore")
 
@@ -174,13 +176,10 @@ class CellID:
                             barcode_id
                         ]
                         # TODO: Change conditions to adapt with tolerance_drift type update (from Float to Tuple)
-                        keep_alignment = (
-                            error_mask[
-                                int(np.floor(x_int / block_size)),
-                                int(np.floor(y_int / block_size)),
-                            ]
-                            < max(tolerance_drift)
-                        )
+                        keep_alignment = error_mask[
+                            int(np.floor(x_int / block_size)),
+                            int(np.floor(y_int / block_size)),
+                        ] < max(tolerance_drift)
 
             # keeps it always if barcode is fiducial
             if (
@@ -331,9 +330,13 @@ class CellID:
             ]
             if not isinstance(self.tolerance_drift, tuple):
                 # defines a tuple suitable for anisotropic tolerance_drift (z,x,y)
-                tolerance_drift = (tolerance_drift,tolerance_drift,tolerance_drift)
+                tolerance_drift = (tolerance_drift, tolerance_drift, tolerance_drift)
         else:
-            tolerance_drift = (3,1,1) # defines default anisotropic tolerance_drift (z,x,y)
+            tolerance_drift = (
+                3,
+                1,
+                1,
+            )  # defines default anisotropic tolerance_drift (z,x,y)
             print_log("# toleranceDrift not found. Set to {}!".format(tolerance_drift))
 
         if "blockSize" in self.current_param.param_dict["alignImages"]:
@@ -374,7 +377,6 @@ class CellID:
 
             # applies all filters
             if keep_quality and keep_alignment:
-
                 # keeps the particle if the test passed
                 x_uncorrected = self.barcode_map_roi.groups[0]["ycentroid"][
                     i
@@ -457,9 +459,8 @@ class CellID:
         )
 
     def search_local_shift(
-        self, roi, cell_id, barcode, zxy_uncorrected, tolerance_drift= (3,1,1)
+        self, roi, cell_id, barcode, zxy_uncorrected, tolerance_drift=(3, 1, 1)
     ):
-
         if "mask2D" in self.current_param.param_dict["alignImages"]["localAlignment"]:
             return self.search_local_shift_mask_2d(roi, cell_id, zxy_uncorrected)
         elif (
@@ -473,7 +474,7 @@ class CellID:
             return zxy_uncorrected
 
     def search_local_shift_block_3d(
-        self, roi, barcode, zxy_uncorrected, tolerance_drift=(3,1,1)
+        self, roi, barcode, zxy_uncorrected, tolerance_drift=(3, 1, 1)
     ):
         """
         Searches for local drift for a specific barcode in a given ROI.
@@ -507,7 +508,6 @@ class CellID:
         zxy_block = [np.floor(a / block_size_xy).astype(int) for a in zxy_uncorrected]
 
         for row in self.alignment_results_table:
-
             # I need to check that the XY coordinates from localization are the same as the ij indices from the block decomposition!
 
             if (
@@ -519,9 +519,10 @@ class CellID:
                 _found_match = True
                 shifts = [row["shift_z"], row["shift_x"], row["shift_y"]]
 
-                
                 # makes list with comparisons per axis
-                check = [np.abs(shift)<tol for shift,tol in zip(shifts,tolerance_drift)]
+                check = [
+                    np.abs(shift) < tol for shift, tol in zip(shifts, tolerance_drift)
+                ]
                 # checks that drifts > tolerance_drift are not applied
                 if all(check):
                     zxy_corrected = [
@@ -676,7 +677,6 @@ class CellID:
             barcode_map_roi_cell_id.groups.keys, barcode_map_roi_cell_id.groups
         ):
             if key["CellID #"] > 1:  # excludes cellID 0 as this is background
-
                 group_keys, cell_id, roi = (
                     group.keys(),
                     key["CellID #"],
@@ -777,7 +777,6 @@ class CellID:
                     index_barcode_2 = np.nonzero(unique_barcodes == barcode2)[0][0]
 
                     if barcode1 != barcode2:
-
                         # attributes distance from the PWDmatrix field in the sc_pwd_item table
                         newdistance = sc_pwd_item["PWDmatrix"][ibarcode1][ibarcode2]
 
@@ -816,7 +815,6 @@ class CellID:
 
 
 def calculate_n_matrix(sc_matrix):
-
     number_cells = sc_matrix.shape[2]
 
     if number_cells > 0:
@@ -829,7 +827,6 @@ def calculate_n_matrix(sc_matrix):
 
 
 def load_local_alignment(current_param, data_folder):
-
     if "None" in current_param.param_dict["alignImages"]["localAlignment"]:
         print_log(
             "\n\n$ localAlignment option set to {}".format(
@@ -844,7 +841,6 @@ def load_local_alignment(current_param, data_folder):
 
 
 def _load_local_alignment(data_folder, mode):
-
     local_alignment_filename = (
         data_folder.output_files["alignImages"].split(".")[0] + "_" + mode + ".dat"
     )
@@ -1072,7 +1068,10 @@ def plots_all_matrices(
 
     # calculates and plots contact probability matrix from merged samples/datasets
     him_matrix, n_cells = calculate_contact_probability_matrix(
-        sc_matrix_collated, unique_barcodes, pixel_size, norm="nonNANs",
+        sc_matrix_collated,
+        unique_barcodes,
+        pixel_size,
+        norm="nonNANs",
     )  # norm: n_cells (default), nonNANs
 
     c_scale = him_matrix.max()
@@ -1215,7 +1214,6 @@ def build_pwd_matrix(
         ]
 
         if len(files_to_process) > 0:
-
             # loads file with cell masks
             filename_roi_masks = (
                 os.path.basename(files_to_process[0]).split(".")[0] + "_Masks.npy"
@@ -1386,7 +1384,9 @@ def process_pwd_matrices(current_param, current_session):
     print_log("\n===================={}====================\n".format(session_name))
     print_log("$ folders read: {}".format(len(data_folder.list_folders)))
     write_string_to_file(
-        current_param.param_dict["fileNameMD"], "## {}\n".format(session_name), "a",
+        current_param.param_dict["fileNameMD"],
+        "## {}\n".format(session_name),
+        "a",
     )
     label = "barcode"
 
@@ -1399,7 +1399,6 @@ def process_pwd_matrices(current_param, current_session):
         print_log("> Masks labels: {}".format(available_masks))
 
         for mask_label in available_masks.keys():
-
             mask_identifier = available_masks[mask_label]
 
             filename_barcode_coordinates = (

@@ -208,7 +208,13 @@ class FileHandling:
 
 
 class Parameters:
-    def __init__(self, root_folder="./", label="", file_name="infoList.json", stardist_basename = None):
+    def __init__(
+        self,
+        root_folder="./",
+        label="",
+        file_name="infoList.json",
+        stardist_basename=None,
+    ):
         self.file_name = file_name
         self.label = label
         self.param_file = root_folder + os.sep + file_name
@@ -217,7 +223,7 @@ class Parameters:
 
         self.initialize_standard_parameters()
         self.convert_parameter_file(self.param_file, self.label)
-        if stardist_basename is not None :
+        if stardist_basename is not None:
             self.param_dict["segmentedObjects"]["stardist_basename"] = stardist_basename
         self.param_dict["rootFolder"] = root_folder
         self.file_parts = {}
@@ -293,7 +299,11 @@ class Parameters:
                         "contact": "coolwarm",
                         "Nmatrix": "Blues",
                     },  # colormaps used for plotting matrices
-                    "toleranceDrift": [3,1,1],  # zxy tolerance used for block drift correction, in px
+                    "toleranceDrift": [
+                        3,
+                        1,
+                        1,
+                    ],  # zxy tolerance used for block drift correction, in px
                     "remove_uncorrected_localizations": True,  # if True it will removed uncorrected localizations, otherwise they will remain uncorrectd.
                 },
                 "segmentedObjects": {
@@ -399,7 +409,6 @@ class Parameters:
 
     # method returns label-specific filenames from filename list
     def find_files_to_process(self, files_folder):
-
         # defines channel for DAPI, fiducials and barcodes
         channel_dapi = self.set_channel("DAPI_channel", "ch00")
         channel_barcode = self.set_channel("barcode_channel", "ch01")
@@ -545,7 +554,6 @@ class DaskCluster:
         self.client = None
 
     def initialize_cluster(self):
-
         number_cores_available = multiprocessing.cpu_count()
 
         # we want at least 12 GB per worker
@@ -575,7 +583,9 @@ class DaskCluster:
             print("$ No running cluster detected. Will start one.")
 
         self.cluster = LocalCluster(
-            n_workers=self.n_threads, threads_per_worker=1, memory_limit="64GB",
+            n_workers=self.n_threads,
+            threads_per_worker=1,
+            memory_limit="64GB",
         )
         self.client = Client(self.cluster)
 
@@ -585,6 +595,7 @@ class DaskCluster:
 # =============================================================================
 # FUNCTIONS
 # =============================================================================
+
 
 # cmd line output only
 def info(text):
@@ -732,7 +743,7 @@ def roi_to_fiducial_filename(current_param, file, barcode_name):
 
 
 def unique(list1):
-    """ function to get unique values"""
+    """function to get unique values"""
     # intilize a null list
     unique_list = []
 
@@ -804,7 +815,6 @@ def retrieve_number_rois_folder(root_folder, reg_exp, ext="tif"):
 
 
 def load_alignment_dictionary(data_folder):
-
     dict_filename = (
         os.path.splitext(data_folder.output_files["dictShifts"])[0] + ".json"
     )
@@ -847,7 +857,6 @@ def print_dict(dictionary):
 
 
 def get_dictionary_value(dictionary, key, default=""):
-
     if key in dictionary.keys():
         value = dictionary[key]
     else:
@@ -872,15 +881,14 @@ def loads_barcode_dict(file_name):
         print("File does not exist")
         return dict()
     else:
-
         # Opening JSON file
         f = open(file_name)
-    
+
         # returns JSON object as a dictionary
         barcode_type = json.load(f)
-    
+
         # Closing file
         f.close()
-    
+
         print("$ {} barcode dictionary loaded")
         return barcode_type

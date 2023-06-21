@@ -42,7 +42,9 @@ from matrixOperations.chromatin_trace_table import ChromatinTraceTable
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--output_file", help="Output File name. Default = merged_traces.ecsv")
+    parser.add_argument(
+        "-o", "--output_file", help="Output File name. Default = merged_traces.ecsv"
+    )
     parser.add_argument("-O", "--output_folder", help="Output File name. Default = ./")
     p = {}
 
@@ -58,7 +60,14 @@ def parse_arguments():
         p["output_file"] = "merged_traces.ecsv"
 
     p["trace_files"] = []
-    if select.select([sys.stdin,], [], [], 0.0)[0]:
+    if select.select(
+        [
+            sys.stdin,
+        ],
+        [],
+        [],
+        0.0,
+    )[0]:
         p["trace_files"] = [line.rstrip("\n") for line in sys.stdin]
     else:
         print("Nothing in stdin!\n")
@@ -69,16 +78,15 @@ def parse_arguments():
 
     return p
 
-def appends_traces(traces, trace_files):
 
+def appends_traces(traces, trace_files):
     new_trace = ChromatinTraceTable()
 
     # iterates over traces in folder
     for trace_file in trace_files:
-
         # reads new trace
         new_trace.load(trace_file)
-        
+
         # adds it to existing trace collection
         traces.append(new_trace.data)
         traces.number_traces += 1
@@ -91,7 +99,6 @@ def appends_traces(traces, trace_files):
 
 
 def load_traces(trace_files=[]):
-
     traces = ChromatinTraceTable()
     traces.initialize()
     traces.number_traces = 0
@@ -106,7 +113,6 @@ def load_traces(trace_files=[]):
 
 
 def run(p):
-
     print("\n" + "-" * 80)
 
     # [ creates output folder]
@@ -114,9 +120,8 @@ def run(p):
         os.mkdir(p["outputFolder"])
         print("Folder created: {}".format(p["outputFolder"]))
 
-    #loads and merges traces
+    # loads and merges traces
     traces = load_traces(trace_files=p["trace_files"])
-
 
     # saves merged trace table
     output_file = p["output_file"]
@@ -136,7 +141,6 @@ def run(p):
 
 
 def main():
-
     # [parsing arguments]
     p = parse_arguments()
 

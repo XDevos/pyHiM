@@ -23,8 +23,7 @@ import os
 
 from dask.distributed import get_client, wait
 
-from fileProcessing.fileManagement import (Folders, print_log,
-                                           write_string_to_file)
+from fileProcessing.fileManagement import Folders, print_log, write_string_to_file
 from imageProcessing.imageProcessing import Image
 
 # =============================================================================
@@ -33,11 +32,9 @@ from imageProcessing.imageProcessing import Image
 
 
 def make_2d_projections_file(file_name, current_param, current_session, data_folder):
-
     if file_name in current_session.data:
         print_log("# File already projected: {}".format(os.path.basename(file_name)))
     else:
-
         print_log("\n> Analysing file: {}".format(os.path.basename(file_name)))
 
         # creates image object
@@ -148,9 +145,7 @@ def make_projections(current_param, current_session, file_name=None):
                     wait(threads)
 
         else:
-
             for _, filename_to_process in enumerate(current_param.files_to_process):
-
                 if (file_name is None) or (
                     file_name is not None
                     and (

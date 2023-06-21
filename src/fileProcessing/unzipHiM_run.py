@@ -23,7 +23,6 @@ import os
 
 
 def main():
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-F", "--rootFolder", help="Folder with images, default: .")
     parser.add_argument(
@@ -54,13 +53,11 @@ def main():
     print(f"RootFolders: {root_folders}")
 
     for root_folder in root_folders:
-
         # opens tarfile
         os.chdir(root_folder)
         tar_filename = "HiMrun.tar.gz"
 
         if os.path.exists(root_folder + os.sep + tar_filename):
-
             print(f"Unzipping archive: {tar_filename}")
 
             # tar files in root_folder

@@ -154,7 +154,7 @@ def check_dict(string: str):
 
 
 def update_infolist(user_values_dic, infolist_dic_full, current_dir):
-    """"
+    """ "
     1-Save old parameters from infolist_dic_full in infoList_preVersion.json in current directory.
     2-Save new parameters from user_values_dic in infoList.json in current directory.
     """

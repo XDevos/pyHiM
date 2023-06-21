@@ -11,23 +11,31 @@ plots N Hi-M matrices in a subplot
 import argparse
 import csv
 import json
-#%% imports and plotting settings
+
+# %% imports and plotting settings
 import os
 
 import matplotlib.gridspec as gridspec
+
 # import matplotlib as plt
 import matplotlib.pyplot as plt
 import numpy as np
 
 from matrixOperations.HIMmatrixOperations import (
-    AnalysisHiMMatrix, calculate_contact_probability_matrix, list_sc_to_keep,
-    normalize_matrix, plot_distance_histograms, plot_matrix, plot_scalogram,
-    shuffle_matrix)
+    AnalysisHiMMatrix,
+    calculate_contact_probability_matrix,
+    list_sc_to_keep,
+    normalize_matrix,
+    plot_distance_histograms,
+    plot_matrix,
+    plot_scalogram,
+    shuffle_matrix,
+)
 
 # import scaleogram as scg
 
 
-#%% define and loads datasets
+# %% define and loads datasets
 
 
 def parse_arguments():
@@ -192,7 +200,6 @@ def parse_arguments():
 # FUNCTIONS
 # =============================================================================
 def plotTADs(list_data, run_parameters):
-
     if len(run_parameters["cAxis"]) == 2:
         c_scale = run_parameters["cAxis"][1]
     else:
@@ -201,12 +208,10 @@ def plotTADs(list_data, run_parameters):
     fontsize = run_parameters["fontsize"]
 
     for idataSet in dataSets:
-
         if (
             run_parameters["type"] == "contact"
             and "TAD2plot" in list_data[idataSet].keys()
         ):
-
             Samples = list_data[idataSet]["Folders"]
             c_m = list_data[idataSet]["ContactProbability_cm"]
 
@@ -263,7 +268,6 @@ def plotTADs(list_data, run_parameters):
             for isample, ifigure, i_fig_label, yticks, xticks, legend, icolorbar in zip(
                 Samples, FigList, FigLabels, Yticks, Xticks, legendList, colorbar
             ):
-
                 him_data = AnalysisHiMMatrix(run_parameters, os.path.dirname(isample))
                 him_data.load_data()
 
@@ -339,7 +343,6 @@ def makesplotHiMLineProfile(
     c_m="RdBu",
     fontsize=8,
 ):
-
     numberSegments = matrixSegmentAnchor.shape[1]
 
     fig1 = plt.figure(constrained_layout=True)
@@ -376,7 +379,6 @@ def plotHiMLineProfile(list_data, run_parameters):
             run_parameters["type"] == "contact"
             and "plotSegment_anchor" in list_data[idataSet].keys()
         ):
-
             Samples = list_data[idataSet]["Folders"]
 
             plotSegment_anchor = list_data[idataSet]["plotSegment_anchor"]
@@ -407,7 +409,6 @@ def plotHiMLineProfile(list_data, run_parameters):
             matrixSegmentAnchor = np.zeros((number_barcodes, numberSegments))
 
             for iSample, sample in enumerate(Samples):
-
                 him_data = AnalysisHiMMatrix(run_parameters, os.path.dirname(sample))
                 him_data.load_data()
 
@@ -468,7 +469,6 @@ def plotHiMLineProfile(list_data, run_parameters):
 
 def plotMultipleHiMmatrices(list_data, run_parameters):
     for idataSet in dataSets:
-
         Samples = list_data[idataSet]["Folders"]
 
         Nplots = len(Samples)
@@ -506,7 +506,6 @@ def plotMultipleHiMmatrices(list_data, run_parameters):
         for isample, ifigure, i_fig_label, yticks, xticks, legend, icolorbar in zip(
             Samples, FigList, FigLabels, Yticks, Xticks, legendList, colorbar
         ):
-
             him_data = AnalysisHiMMatrix(run_parameters, os.path.dirname(isample))
             him_data.load_data()
 
@@ -611,7 +610,6 @@ def plotMultipleHiMmatrices(list_data, run_parameters):
 
 
 def main():
-
     print(">>> Producing HiM matrix")
     run_parameters = parse_arguments()
 

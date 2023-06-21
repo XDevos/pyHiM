@@ -80,12 +80,17 @@ def parse_arguments():
     parser.add_argument("-F", "--rootFolder", help="Folder with images")
     parser.add_argument("--input", help="Name of input trace file.")
     parser.add_argument("-n", "--number_traces", help="Number of traces treated")
-    parser.add_argument("-N", "--N_barcodes", help="minimum_number_barcodes. Default = 2")
+    parser.add_argument(
+        "-N", "--N_barcodes", help="minimum_number_barcodes. Default = 2"
+    )
     parser.add_argument("--selected_trace", help="Selected trace for analysis")
     parser.add_argument(
-        "--barcode_type_dict", help="Json dictionnary linking barcodes and atom types (MUST BE 3 characters long!). "
+        "--barcode_type_dict",
+        help="Json dictionnary linking barcodes and atom types (MUST BE 3 characters long!). ",
     )
-    parser.add_argument("--all", help="plots all traces in trace file", action="store_true")
+    parser.add_argument(
+        "--all", help="plots all traces in trace file", action="store_true"
+    )
     parser.add_argument(
         "--pipe", help="inputs Trace file list from stdin (pipe)", action="store_true"
     )
@@ -102,7 +107,7 @@ def parse_arguments():
         p["input"] = args.input
     else:
         p["input"] = None
-        
+
     if args.N_barcodes:
         p["N_barcodes"] = int(args.N_barcodes)
     else:
@@ -131,14 +136,21 @@ def parse_arguments():
     p["trace_files"] = []
     if args.pipe:
         p["pipe"] = True
-        if select.select([sys.stdin,], [], [], 0.0)[0]:
+        if select.select(
+            [
+                sys.stdin,
+            ],
+            [],
+            [],
+            0.0,
+        )[0]:
             p["trace_files"] = [line.rstrip("\n") for line in sys.stdin]
         else:
             print("Nothing in stdin")
     else:
         p["pipe"] = False
         p["trace_files"] = [p["input"]]
-        
+
     return p
 
 
@@ -151,16 +163,17 @@ def runtime(
     folder_path="./PDBs",
     select_traces="one",
 ):
-
     # gets trace files
 
     if len(trace_files) > 0:
-
-        print("\n{} trace files to process= {}".format(len(trace_files), "\n".join(map(str, trace_files))))
+        print(
+            "\n{} trace files to process= {}".format(
+                len(trace_files), "\n".join(map(str, trace_files))
+            )
+        )
 
         # iterates over traces in folder
         for trace_file in trace_files:
-
             trace = ChromatinTraceTable()
             trace.initialize()
 
@@ -183,11 +196,11 @@ def runtime(
                 trace_id = single_trace["Trace_ID"][0]
                 flag = False
 
-                if select_traces == 'selected' and trace_id == selected_trace:
+                if select_traces == "selected" and trace_id == selected_trace:
                     flag = True
-                elif select_traces == 'all':
+                elif select_traces == "all":
                     flag = True
-                    
+
                 if flag:
                     print("Converting trace ID: {}".format(trace_id))
 
@@ -196,14 +209,15 @@ def runtime(
                     new_trace = new_trace.group_by("Barcode #")
                     # ascii.write(new_trace['Barcode #', 'x','y','z'], selected_trace+'.ecsv', overwrite=True)
 
-                    write_xyz_2_pdb(folder_path + os.sep + trace_id + ".pdb", new_trace, barcode_type)
+                    write_xyz_2_pdb(
+                        folder_path + os.sep + trace_id + ".pdb",
+                        new_trace,
+                        barcode_type,
+                    )
     else:
         print("No trace file found to process!")
 
     return len(trace_files)
-
-
-
 
 
 # =============================================================================
@@ -222,7 +236,9 @@ def main():
 
     # creates output folder
     output_folder = "PDBs"
-    folder_path = os.path.join(os.getcwd(), output_folder)  # Specify the folder path here
+    folder_path = os.path.join(
+        os.getcwd(), output_folder
+    )  # Specify the folder path here
 
     create_folder(folder_path)
 

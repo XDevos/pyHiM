@@ -23,7 +23,6 @@ import os
 
 
 def main():
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-F", "--rootFolder", help="Folder with images, default: .")
     parser.add_argument(
@@ -94,7 +93,6 @@ def main():
     print(f"Folders to zip:\n{folders}")
     print("=" * 30)
     for current_folder in folders:
-
         folders2zip = []
         folders2zip.append(current_folder + os.sep + "zProject")
         folders2zip.append(current_folder + os.sep + "alignImages")
@@ -111,7 +109,6 @@ def main():
 
             file_extensions = ["/*.png", "/*.dat", "/*.ecsv", "/buildsPWDmatrix*.npy"]
             for new_file_extensions in file_extensions:
-
                 new_files = new_folder_relative + new_file_extensions
 
                 if len(glob.glob(new_files)) > 0:

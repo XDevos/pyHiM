@@ -31,14 +31,18 @@ import seaborn as sns
 # FUNCTIONS
 # =============================================================================q
 
+
 def usage():
-    print("-"*80)
+    print("-" * 80)
     print("Example usage:\n")
     print("$ ls buildsPWDmatrix/*HiM*npy")
-    print("buildsPWDmatrix/buildsPWDmatrix_DAPI_HiMscMatrix.npy  buildsPWDmatrix/buildsPWDmatrix_mask0_HiMscMatrix.npy")
+    print(
+        "buildsPWDmatrix/buildsPWDmatrix_DAPI_HiMscMatrix.npy  buildsPWDmatrix/buildsPWDmatrix_mask0_HiMscMatrix.npy"
+    )
     print("$ ls buildsPWDmatrix/*HiM*npy | compare_PWD_matrices.py\n")
     print("You should now see a file called scatter_plot.png\n")
-    print("-"*80)
+    print("-" * 80)
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
@@ -57,7 +61,14 @@ def parse_arguments():
 
     p["input_files"] = list()
 
-    if select.select([sys.stdin,], [], [], 0.0)[0]:
+    if select.select(
+        [
+            sys.stdin,
+        ],
+        [],
+        [],
+        0.0,
+    )[0]:
         p["input_files"] = [line.rstrip("\n") for line in sys.stdin]
     else:
         print("Nothing in stdin. Please provide list of localization files to process.")
@@ -68,43 +79,53 @@ def parse_arguments():
 
     return p
 
-def plot_result(x,y,p):
 
-    plt.figure(figsize=(15,15))
-    plt.rcParams.update({'font.size': 20})
+def plot_result(x, y, p):
+    plt.figure(figsize=(15, 15))
+    plt.rcParams.update({"font.size": 20})
 
-    plt.scatter(x, y, label = "Pearson = {:.2f}".format(p), color = "m", 
-                marker = "o", s = 30, linewidth = 5) 
-      
-    plt.xscale('log') 
-    plt.yscale('log') 
-      
-    plt.title('Correlation between PWD distances')
-    plt.xlabel('dataset 1') 
-    plt.ylabel('dataset 2') 
-    plt.legend() 
-    
-    axisX = np.linspace(np.min([x[x!=0],y[y!=0]]), np.max([x,y]),100)
-    plt.plot(axisX, axisX, color='red', linewidth=3)        
-    
-    #plt.show()
-    filename = 'scatter_plot.png'
+    plt.scatter(
+        x,
+        y,
+        label="Pearson = {:.2f}".format(p),
+        color="m",
+        marker="o",
+        s=30,
+        linewidth=5,
+    )
+
+    plt.xscale("log")
+    plt.yscale("log")
+
+    plt.title("Correlation between PWD distances")
+    plt.xlabel("dataset 1")
+    plt.ylabel("dataset 2")
+    plt.legend()
+
+    axisX = np.linspace(np.min([x[x != 0], y[y != 0]]), np.max([x, y]), 100)
+    plt.plot(axisX, axisX, color="red", linewidth=3)
+
+    # plt.show()
+    filename = "scatter_plot.png"
     plt.savefig(filename)
     print(f"> Output image saved as : {filename}")
-    
+
+
 def calculates_pearson_correlation(x, y):
-     
     r, p = scipy.stats.pearsonr(x, y)
-    
+
     return r
+
 
 def parses_matrix_to_vector(matrix):
     matrix_shape = matrix.shape
     matrix = np.nan_to_num(matrix)
-    return matrix.reshape(matrix_shape[0]*matrix_shape[1])
+    return matrix.reshape(matrix_shape[0] * matrix_shape[1])
+
 
 def load_matrix(file):
     return np.load(file)
+
 
 def main_script(p):
     print("Processing files\n" + "=" * 16)
@@ -112,23 +133,23 @@ def main_script(p):
     files = p["input_files"]
     matrices = [load_matrix(file) for file in files]
 
-    matrices = [np.nanmean(matrix,axis=2) for matrix in matrices]
+    matrices = [np.nanmean(matrix, axis=2) for matrix in matrices]
 
-    [x,y] = [parses_matrix_to_vector(matrix) for matrix in matrices]
+    [x, y] = [parses_matrix_to_vector(matrix) for matrix in matrices]
 
     r = calculates_pearson_correlation(x, y)
 
     print("Pearson Correlation Coefficient: ", r)
-    
-    plot_result(x,y, r)
-    
+
+    plot_result(x, y, r)
+
+
 # =============================================================================
 # MAIN
 # =============================================================================
 
 
 def main():
-
     usage()
 
     # [parsing arguments]
@@ -136,7 +157,7 @@ def main():
 
     # [loops over lists of datafolders]
     folder = p["rootFolder"]
-    
+
     n_files = len(p["input_files"])
     print(f"> Number of input files: {n_files}")
     if n_files < 1:
@@ -151,12 +172,12 @@ def main():
     print("Input files: ")
     for file in p["input_files"]:
         print(f"{file}")
-    print("-"*80)
-    
+    print("-" * 80)
+
     main_script(p)
 
     print("Finished execution")
-    print("-"*80)
+    print("-" * 80)
 
 
 if __name__ == "__main__":

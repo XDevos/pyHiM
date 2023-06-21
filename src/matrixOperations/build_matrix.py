@@ -34,6 +34,7 @@ import os
 import re
 import sys
 import uuid
+
 # to remove in a future version
 import warnings
 
@@ -49,8 +50,10 @@ from fileProcessing.fileManagement import get_dictionary_value, print_log
 from matrixOperations.build_traces import initialize_module
 from matrixOperations.chromatin_trace_table import ChromatinTraceTable
 from matrixOperations.HIMmatrixOperations import (
-    calculate_contact_probability_matrix, plot_distance_histograms,
-    plot_matrix)
+    calculate_contact_probability_matrix,
+    plot_distance_histograms,
+    plot_matrix,
+)
 
 warnings.filterwarnings("ignore")
 
@@ -60,8 +63,7 @@ warnings.filterwarnings("ignore")
 
 
 class BuildMatrix:
-    def __init__(self, param, colormaps = dict()):
-
+    def __init__(self, param, colormaps=dict()):
         self.current_param = param
         self.colormaps = colormaps
 
@@ -69,8 +71,8 @@ class BuildMatrix:
 
         # initialize with default values
         self.current_folder = []
-        self.log_name_md = 'trace_to_matrix.log'
-        
+        self.log_name_md = "trace_to_matrix.log"
+
     def initialize_parameters(self):
         # initializes parameters from current_param
 
@@ -91,7 +93,11 @@ class BuildMatrix:
                 self.current_param.param_dict["acquisition"], "pixelSizeZ", default=0.25
             )
             self.pixel_size_z = self.z_binning * self.pixel_size_z_0
-            self.pixel_size = [self.pixel_size_xy, self.pixel_size_xy, self.pixel_size_z]
+            self.pixel_size = [
+                self.pixel_size_xy,
+                self.pixel_size_xy,
+                self.pixel_size_z,
+            ]
             self.available_masks = get_dictionary_value(
                 self.current_param.param_dict["buildsPWDmatrix"],
                 "masks2process",
@@ -103,8 +109,10 @@ class BuildMatrix:
                 "mask_expansion",
                 default=8,
             )
-            
-            self.colormaps = self.current_param.param_dict["buildsPWDmatrix"]["colormaps"]
+
+            self.colormaps = self.current_param.param_dict["buildsPWDmatrix"][
+                "colormaps"
+            ]
 
     def calculate_pwd_single_mask(self, x, y, z):
         """
@@ -178,7 +186,6 @@ class BuildMatrix:
         for trace, trace_id, itrace in tzip(
             data_traces.groups, data_traces.groups.keys, range(number_matrices)
         ):
-
             barcodes_to_process = trace["Barcode #"].data
 
             # gets lists of x, y and z coordinates for barcodes assigned to a cell mask
@@ -202,7 +209,6 @@ class BuildMatrix:
                     index_barcode_2 = np.nonzero(unique_barcodes == barcode2)[0][0]
 
                     if barcode1 != barcode2:
-
                         # attributes distance from the PWDmatrix field in the sc_pwd_item table
                         newdistance = pwd_matrix[ibarcode1, ibarcode2]
 
@@ -234,7 +240,6 @@ class BuildMatrix:
         self.unique_barcodes = unique_barcodes
 
     def calculate_n_matrix(self):
-
         number_cells = self.sc_matrix.shape[2]
 
         if number_cells > 0:
@@ -302,7 +307,10 @@ class BuildMatrix:
 
         # calculates and plots contact probability matrix from merged samples/datasets
         him_matrix, n_cells = calculate_contact_probability_matrix(
-            self.sc_matrix, self.unique_barcodes, pixel_size, norm="nonNANs",
+            self.sc_matrix,
+            self.unique_barcodes,
+            pixel_size,
+            norm="nonNANs",
         )  # norm: n_cells (default), nonNANs
 
         c_scale = him_matrix.max()
@@ -350,7 +358,6 @@ class BuildMatrix:
         )
 
     def save_matrices(self, file):
-
         output_filename = file.split(".")[0] + "_Matrix"
 
         # saves output
@@ -390,7 +397,6 @@ class BuildMatrix:
         self.save_matrices(file)
 
     def run(self):
-
         # initializes session_name, data_folder, current_folder
         self.label = "barcode"
         self.data_folder, self.current_folder = initialize_module(

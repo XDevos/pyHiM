@@ -40,9 +40,14 @@ import warnings
 
 from fileProcessing.fileManagement import write_string_to_file
 from matrixOperations.HIMmatrixOperations import (
-    load_sc_data, load_sc_data_matlab, plot_ensemble_3_way_contact_matrix,
-    plot_ensemble_contact_probability_matrix, plot_inverse_pwd_matrix,
-    plot_single_contact_probability_matrix, plot_single_pwd_matrice)
+    load_sc_data,
+    load_sc_data_matlab,
+    plot_ensemble_3_way_contact_matrix,
+    plot_ensemble_contact_probability_matrix,
+    plot_inverse_pwd_matrix,
+    plot_single_contact_probability_matrix,
+    plot_single_pwd_matrice,
+)
 
 # warnings.filterwarnings("ignore")
 
@@ -187,7 +192,6 @@ def main():
 
     # [loops over lists of datafolders]
     for dataset_name in list(list_data.keys()):
-
         # [loads SC matrices]
         if p["format"] == "pyHiM":
             print(">>> Loading pyHiM-formatted dataset")

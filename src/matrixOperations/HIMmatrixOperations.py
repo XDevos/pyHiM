@@ -160,7 +160,6 @@ class AnalysisHiMMatrix:
         show_title=False,
         fig_title="",
     ):
-
         pos = ifigure.imshow(matrix, cmap=c_m)  # colormaps RdBu seismic
 
         if show_title:
@@ -210,7 +209,6 @@ class AnalysisHiMMatrix:
             ax.set_clim(vmin=c_min, vmax=c_max)
 
     def plot_1d_profile1dataset(self, ifigure, anchor, i_fig_label, yticks, xticks):
-
         prop_cycle = plt.rcParams["axes.prop_cycle"]
         colors = prop_cycle.by_key()["color"]
         lwbase = plt.rcParams["lines.linewidth"]
@@ -313,7 +311,6 @@ class AnalysisHiMMatrix:
 
 
 def normalize_profile(profile1, profile2, run_parameters):
-
     print("Normalization: {}".format(run_parameters["normalize"]))
 
     mode = run_parameters["normalize"]
@@ -343,7 +340,6 @@ def plot_1d_profile2datasets(
     xticks,
     legend=False,
 ):
-
     prop_cycle = plt.rcParams["axes.prop_cycle"]
     colors = prop_cycle.by_key()["color"]
     lwbase = plt.rcParams["lines.linewidth"]
@@ -408,7 +404,6 @@ def load_list(file_name):
 
 
 def attributes_labels2cells(snd_table, results_table, label="doc"):
-
     sorted_snd_table = snd_table.group_by("MaskID #")
     list_keys = list(sorted_snd_table.groups.keys["MaskID #"].data)
     index_key = [
@@ -417,7 +412,6 @@ def attributes_labels2cells(snd_table, results_table, label="doc"):
 
     # checks that there is at least one cell with the label
     if len(index_key) > 0:
-
         snd_table_with_label = sorted_snd_table.groups[index_key[0]]
         print("\n>>> Matching labels")
         print(
@@ -714,7 +708,6 @@ def load_sc_data(list_data, dataset_name, p):
 
 
 def load_sc_data_matlab(list_data, dataset_name, p):
-
     print("Dataset to load: {}\n\n".format(list(list_data.keys())[0]))
 
     sc_matrix_collated, unique_barcodes = [], []
@@ -823,7 +816,6 @@ def plot_ensemble_3_way_contact_matrix(
     markdown_filename="tmp.md",
     dataset_name="",
 ):
-
     # combines matrices from different samples and calculates integrated contact probability matrix
     sc_matrix_all_datasets = []  # np.zeros((n_barcodes,n_barcodes))
     for i_sc_matrix_collated, i_unique_barcodes, mask, i_tag in zip(
@@ -936,7 +928,6 @@ def calculate_3_way_contact_matrix(
     threshold=0.25,
     norm="nonNANs",
 ):
-
     n_x = n_y = i_sc_matrix_collated.shape[0]
     sc_matrix = np.zeros((n_x, n_y))
 
@@ -1283,7 +1274,6 @@ def plot_ensemble_contact_probability_matrix(
     markdown_filename="tmp.md",
     dataset_name="",
 ):
-
     if "minNumberContacts" in i_list_data.keys():
         min_number_contacts = i_list_data["minNumberContacts"]
     else:
@@ -1387,7 +1377,6 @@ def plot_ensemble_contact_probability_matrix(
 
 
 def shuffle_matrix(matrix, index):
-
     new_size = len(index)
     new_matrix = np.zeros((new_size, new_size))
 
@@ -1515,7 +1504,7 @@ def plot_scalogram(matrix2plot, output_filename=""):
 
 
 def decodes_trace(single_trace):
-    '''
+    """
     from a trace entry, provides Numpy array with coordinates, barcode and trace names
 
     Parameters
@@ -1526,51 +1515,57 @@ def decodes_trace(single_trace):
     Returns
     -------
     list of barcodes
-    x, y and z coordinates as numpy arrays, 
+    x, y and z coordinates as numpy arrays,
     trace name as string
 
-    '''
-    barcodes, X, Y, Z= single_trace["Barcode #"], single_trace["x"], single_trace["y"], single_trace["z"]
-    trace_name = single_trace['Trace_ID'][0][0:3]
-  
-    return barcodes, X, Y, Z, trace_name 
-    
-def write_xyz_2_pdb(file_name, single_trace, barcode_type = dict()):
+    """
+    barcodes, X, Y, Z = (
+        single_trace["Barcode #"],
+        single_trace["x"],
+        single_trace["y"],
+        single_trace["z"],
+    )
+    trace_name = single_trace["Trace_ID"][0][0:3]
+
+    return barcodes, X, Y, Z, trace_name
+
+
+def write_xyz_2_pdb(file_name, single_trace, barcode_type=dict()):
     # writes xyz coordinates to a PDB file wth pseudoatoms
     # file_name : string of output file path, e.g. '/foo/bar/test2.pdb'
     # xyz      : n-by-3 numpy array with atom coordinates
 
-    default_atom_name = 'xxx'
-    barcodes, X, Y, Z, trace_name = decodes_trace(single_trace)    
-    
-    # builds NP array 
-    xyz=np.transpose(np.array([X,Y,Z]))
+    default_atom_name = "xxx"
+    barcodes, X, Y, Z, trace_name = decodes_trace(single_trace)
+
+    # builds NP array
+    xyz = np.transpose(np.array([X, Y, Z]))
 
     # calculates center of mass
     center_of_mass = np.mean(X), np.mean(Y), np.mean(Z)
-    
+
     # recenters and converts to A
-    unit_conversion = 10.0 # converts from nm to Angstroms
-    xyz = unit_conversion*(xyz-center_of_mass)
+    unit_conversion = 10.0  # converts from nm to Angstroms
+    xyz = unit_conversion * (xyz - center_of_mass)
 
     # writes PDB file
     n_atoms = xyz.shape[0]
-    
+
     # defines atom names from barcode properties
-    if len(barcode_type)<1:
+    if len(barcode_type) < 1:
         # all atoms have the same identity
-        print('did not find barcode_type dictionnary')
-        for i,barcode in enumerate(barcodes):
-            barcode_type['{}'.format(barcode)] = default_atom_name
+        print("did not find barcode_type dictionnary")
+        for i, barcode in enumerate(barcodes):
+            barcode_type["{}".format(barcode)] = default_atom_name
     else:
         # adds missing keys
         # print("$ keys: {}".format(barcode_type.keys()))
         for barcode in barcodes:
             if str(barcode) not in barcode_type.keys():
-                barcode_type['{}'.format(barcode)] = default_atom_name   
-                print('$ fixing key {} as not found in dict'.format(barcode))       
+                barcode_type["{}".format(barcode)] = default_atom_name
+                print("$ fixing key {} as not found in dict".format(barcode))
 
-    '''
+    """
         COLUMNS        DATA TYPE       CONTENTS                            
     --------------------------------------------------------------------------------
      1 -  6        Record name     "ATOM  "                                            
@@ -1589,15 +1584,15 @@ def write_xyz_2_pdb(file_name, single_trace, barcode_type = dict()):
     73 - 76        LString(4)      Segment identifier, left-justified.   
     77 - 78        LString(2)      Element symbol, right-justified.      
     79 - 80        LString(2)      Charge on the atom.   
-    '''
+    """
 
     with open(file_name, mode="w+", encoding="utf-8") as fid:
         ## atom coordinates
-        #txt = "HETATM  {: 3d}  C{:02d} {} P   1      {: 5.3f}  {: 5.3f}  {: 5.3f}  0.00  0.00      PSDO C  \n"
-        #txt = "HETATM  {: 3d}  {} {} P{: 3d}      {: 5.3f}  {: 5.3f}  {: 5.3f}  0.00  0.00      PSDO C  \n"        
-        #for i in range(n_atoms):
+        # txt = "HETATM  {: 3d}  C{:02d} {} P   1      {: 5.3f}  {: 5.3f}  {: 5.3f}  0.00  0.00      PSDO C  \n"
+        # txt = "HETATM  {: 3d}  {} {} P{: 3d}      {: 5.3f}  {: 5.3f}  {: 5.3f}  0.00  0.00      PSDO C  \n"
+        # for i in range(n_atoms):
         #    atom_name = barcode_type[str(barcodes[i])]
-            #fid.write(txt.format(i + 1, i + 1, trace_name, int(barcodes[i]), xyz[i, 0], xyz[i, 1], xyz[i, 2]))
+        # fid.write(txt.format(i + 1, i + 1, trace_name, int(barcodes[i]), xyz[i, 0], xyz[i, 1], xyz[i, 2]))
         #    fid.write(txt.format(i + 1, atom_name, trace_name, int(barcodes[i]), xyz[i, 0], xyz[i, 1], xyz[i, 2]))
 
         ## fills fields with correct spacing
@@ -1611,7 +1606,7 @@ def write_xyz_2_pdb(file_name, single_trace, barcode_type = dict()):
         field_code_insertion = "    "
         field_X = "{}"
         field_Y = "{}"
-        field_Z = "{}" #" {:0<7.3f}"
+        field_Z = "{}"  # " {:0<7.3f}"
         field_occupancy = "   0.0"
         field_temp_factor = "   0.0"
         field_segment_identifier = "      " + "PSDO"
@@ -1640,13 +1635,21 @@ def write_xyz_2_pdb(file_name, single_trace, barcode_type = dict()):
         # txt = "HETATM  {: 3d}  C{:02d} {} P   1      {: 5.3f}  {: 5.3f}  {: 5.3f}  0.00  0.00      PSDO C  \n"
         for i in range(n_atoms):
             atom_name = barcode_type[str(barcodes[i])]
-            fid.write(txt.format(i + 1, atom_name, int(barcodes[i]), " {:0<7.3f}".format(xyz[i, 0])[0:8], " {:0<7.3f}".format(xyz[i, 1])[0:8], " {:0<7.3f}".format(xyz[i, 2])[0:8] ))
+            fid.write(
+                txt.format(
+                    i + 1,
+                    atom_name,
+                    int(barcodes[i]),
+                    " {:0<7.3f}".format(xyz[i, 0])[0:8],
+                    " {:0<7.3f}".format(xyz[i, 1])[0:8],
+                    " {:0<7.3f}".format(xyz[i, 2])[0:8],
+                )
+            )
 
-        
         ## connectivity
         txt1 = "CONECT  {: 3d}  {: 3d}\n"
         txt2 = "CONECT  {: 3d}  {: 3d}  {: 3d}\n"
-        
+
         # first line of connectivity
         fid.write(txt1.format(1, 2))
 
@@ -1661,40 +1664,39 @@ def write_xyz_2_pdb(file_name, single_trace, barcode_type = dict()):
 
 
 def distances_2_coordinates(distances):
-    """ Infer coordinates from distances
-    """
+    """Infer coordinates from distances"""
     N = distances.shape[0]
     d_0 = []
 
     # pre-caching
     cache = {}
     for j in range(N):
-        sumi = sum([distances[j, k]**2 for k in range(j+1, N)])
+        sumi = sum([distances[j, k] ** 2 for k in range(j + 1, N)])
         cache[j] = sumi
 
     # compute distances from center of mass
     sum2 = sum([cache[j] for j in range(N)])
     for i in range(N):
-        sum1 = cache[i] + sum([distances[j, i]**2 for j in range(i+1)])
+        sum1 = cache[i] + sum([distances[j, i] ** 2 for j in range(i + 1)])
 
-        val = 1/N * sum1 - 1/N**2 * sum2
+        val = 1 / N * sum1 - 1 / N**2 * sum2
         d_0.append(val)
 
     # generate gram matrix
     gram = np.zeros(distances.shape)
     for row in range(distances.shape[0]):
         for col in range(distances.shape[1]):
-            dists = d_0[row]**2 + d_0[col]**2 - distances[row, col]**2
-            gram[row, col] = 1/2 * dists
+            dists = d_0[row] ** 2 + d_0[col] ** 2 - distances[row, col] ** 2
+            gram[row, col] = 1 / 2 * dists
 
     # extract coordinates from gram matrix
     coordinates = []
     vals, vecs = npl.eigh(gram)
 
-    vals = vals[N-3:]
-    vecs = vecs.T[N-3:]
+    vals = vals[N - 3 :]
+    vecs = vecs.T[N - 3 :]
 
-    #print('eigvals:', vals) # must all be positive for PSD (positive semidefinite) matrix
+    # print('eigvals:', vals) # must all be positive for PSD (positive semidefinite) matrix
 
     # same eigenvalues might be small -> exact embedding does not exist
     # fix by replacing all but largest 3 eigvals by 0
@@ -1706,9 +1708,9 @@ def distances_2_coordinates(distances):
 
     return np.array(coordinates).T
 
+
 def coord_2_distances(coordinates):
-    """ Derive distance matrix from given set of coordinates
-    """
+    """Derive distance matrix from given set of coordinates"""
     dimension = coordinates.shape[1]
 
     # get distances
@@ -1716,12 +1718,15 @@ def coord_2_distances(coordinates):
     for row in range(coordinates.shape[0]):
         for col in range(coordinates.shape[0]):
             comp_sum = sum(
-                [(coordinates[row, d] - coordinates[col, d])**2
-                    for d in range(dimension)]
+                [
+                    (coordinates[row, d] - coordinates[col, d]) ** 2
+                    for d in range(dimension)
+                ]
             )
             distances[row, col] = np.sqrt(comp_sum)
 
     return distances
+
 
 def plot_distance_histograms(
     sc_matrix_collated,
@@ -1734,7 +1739,6 @@ def plot_distance_histograms(
     optimize_kernel_width=False,
     max_distance=4.0,
 ):
-
     if not is_notebook():
         n_plots_x = n_plots_y = sc_matrix_collated.shape[0]
     else:
@@ -1825,7 +1829,6 @@ def plot_matrix(
     cells_to_plot=[],
     filename_ending="_HiMmatrix.png",
 ):
-
     n_barcodes = sc_matrix_collated.shape[0]
 
     ######################################################
@@ -1833,7 +1836,6 @@ def plot_matrix(
     ######################################################
 
     if len(sc_matrix_collated.shape) == 3:
-
         # matrix is 3D and needs combining SC matrices into an ensemble matrix
         if len(cells_to_plot) == 0:
             cells_to_plot = range(sc_matrix_collated.shape[2])
@@ -1843,7 +1845,6 @@ def plot_matrix(
         )
 
     else:
-
         # already an ensemble matrix --> no need for further treatment
         if mode == "counts":
             mean_sc_matrix = sc_matrix_collated
@@ -1918,7 +1919,6 @@ def calculate_contact_probability_matrix(
     norm="n_cells",
     min_number_contacts=0,
 ):
-
     n_x = n_y = i_sc_matrix_collated.shape[0]
     n_cells = i_sc_matrix_collated.shape[2]
     sc_matrix = np.zeros((n_x, n_y))
@@ -2226,7 +2226,6 @@ def get_coordinates_from_pwd_matrix(matrix):
 
 
 def sort_cells_by_number_pwd(him_data):
-
     # sc_matrix = him_data.data["SCmatrixCollated"]
     sc_matrix = him_data.sc_matrix_selected
 
@@ -2251,7 +2250,6 @@ def sort_cells_by_number_pwd(him_data):
 
 
 def kde_fit(x, x_d, bandwidth=0.2, kernel="gaussian"):
-
     kde = KernelDensity(bandwidth=bandwidth, kernel="gaussian")
     kde.fit(x[:, None])
 

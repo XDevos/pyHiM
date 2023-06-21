@@ -42,16 +42,25 @@ from astropy.table import Table, vstack
 from skimage import exposure, io
 from skimage.measure import regionprops
 
-from fileProcessing.fileManagement import (Folders, get_dictionary_value,
-                                           load_alignment_dictionary,
-                                           print_dict, print_log,
-                                           retrieve_number_rois_folder,
-                                           try_get_client,
-                                           write_string_to_file)
+from fileProcessing.fileManagement import (
+    Folders,
+    get_dictionary_value,
+    load_alignment_dictionary,
+    print_dict,
+    print_log,
+    retrieve_number_rois_folder,
+    try_get_client,
+    write_string_to_file,
+)
 from imageProcessing.imageProcessing import (
-    _plot_image_3d, _segment_3d_volumes_by_thresholding,
-    _segment_3d_volumes_stardist, apply_xy_shift_3d_images, image_adjust,
-    preprocess_3d_image, reinterpolate_z)
+    _plot_image_3d,
+    _segment_3d_volumes_by_thresholding,
+    _segment_3d_volumes_stardist,
+    apply_xy_shift_3d_images,
+    image_adjust,
+    preprocess_3d_image,
+    reinterpolate_z,
+)
 
 # =============================================================================
 # CLASSES
@@ -247,7 +256,6 @@ class SegmentSources3D:
         return binary, segmented_image_3d
 
     def segment_sources_3d_file(self, filename_to_process):
-
         p = self.p
         # excludes the reference fiducial and processes files in the same ROI
         roi = self.current_param.decode_file_parts(
@@ -492,7 +500,6 @@ class SegmentSources3D:
             client = try_get_client()
 
         if self.number_rois > 0:
-
             # loops over rois
             for roi in self.roi_list:
                 # loads reference fiducial image for this ROI
@@ -576,7 +583,9 @@ class SegmentSources3D:
 
         # saves Table with all shifts in every iteration to avoid loosing computed data
         output_table_global.write(
-            self.output_filename, format="ascii.ecsv", overwrite=True,
+            self.output_filename,
+            format="ascii.ecsv",
+            overwrite=True,
         )
 
     def segment_sources_3d(self):

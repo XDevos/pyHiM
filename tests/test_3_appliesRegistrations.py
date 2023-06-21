@@ -10,33 +10,39 @@ import os
 
 import pytest
 
-from fileProcessing.fileManagement import (Folders, Parameters, Session,
-                                           load_json)
+from fileProcessing.fileManagement import Folders, Parameters, Session, load_json
 from fileProcessing.functionCaller import HiMFunctionCaller
 
 
 def test_appliesProjections():
-
-    testDataFileName=os.getcwd()+os.sep+"tests"+os.sep+"standardTests"+os.sep+"testData.json"
+    testDataFileName = (
+        os.getcwd()
+        + os.sep
+        + "tests"
+        + os.sep
+        + "standardTests"
+        + os.sep
+        + "testData.json"
+    )
     if os.path.exists(testDataFileName):
-        testData= load_json(testDataFileName)
+        testData = load_json(testDataFileName)
     else:
         raise FileNotFoundError()
-        
+
     root_folder = testData["test_appliesRegistrations"]["rootFolder"]
     filename_to_process = testData["test_appliesRegistrations"]["filename_to_process"]
     expectedOutputs = testData["test_appliesRegistrations"]["expectedOutput"]
-    ilabel=testData["test_appliesRegistrations"]["label"]
+    ilabel = testData["test_appliesRegistrations"]["label"]
 
-    run_parameters={}
-    run_parameters["rootFolder"]=root_folder
-    run_parameters["parallel"]=False
-    
-    expectedOutputsTimeStamped={}
+    run_parameters = {}
+    run_parameters["rootFolder"] = root_folder
+    run_parameters["parallel"] = False
+
+    expectedOutputsTimeStamped = {}
     for x in expectedOutputs:
         if os.path.exists(x):
-            expectedOutputsTimeStamped[x]=os.path.getmtime(x)
-            
+            expectedOutputsTimeStamped[x] = os.path.getmtime(x)
+
     labels_to_process = [
         {"label": "fiducial", "parameterFile": "infoList_fiducial.json"},
         {"label": "barcode", "parameterFile": "infoList_barcode.json"},
@@ -45,21 +51,24 @@ def test_appliesProjections():
     ]
 
     him = HiMFunctionCaller(run_parameters, session_name="HiM_analysis")
-    him.initialize()  
+    him.initialize()
 
     # sets parameters
-    current_param = Parameters(run_parameters["rootFolder"], him.labels_to_process[ilabel]["parameterFile"])
-    current_param.param_dict['parallel']=him.parallel
-    
+    current_param = Parameters(
+        run_parameters["rootFolder"], him.labels_to_process[ilabel]["parameterFile"]
+    )
+    current_param.param_dict["parallel"] = him.parallel
+
     him.apply_registrations(current_param, ilabel)
 
-    assert sum([os.path.exists(x) for x in expectedOutputs]) == len(expectedOutputs) 
-    
-    test=[]
+    assert sum([os.path.exists(x) for x in expectedOutputs]) == len(expectedOutputs)
+
+    test = []
     for key in expectedOutputsTimeStamped.keys():
-        if os.path.getmtime(x)>expectedOutputsTimeStamped[x]:
+        if os.path.getmtime(x) > expectedOutputsTimeStamped[x]:
             test.append(True)
-            
-    assert len(test)==len(expectedOutputs)
-    
+
+    assert len(test) == len(expectedOutputs)
+
+
 # test_appliesProjections()

@@ -11,7 +11,6 @@ from parameter_file.info_parameters import *
 
 
 def main():
-
     # initialised when entries are created, dictionary that store the class entry for the parameter,
     # the value and the type of the value
     entries_dic = {}

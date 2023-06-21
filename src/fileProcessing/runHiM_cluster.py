@@ -145,7 +145,6 @@ def read_arguments():
 
 
 def main():
-
     run_parameters = read_arguments()
 
     if run_parameters["dataset"] is None:
@@ -244,7 +243,6 @@ def main():
         )
 
     for folder in folders:
-
         output_file = (
             run_parameters["HOME"]
             + os.sep
@@ -311,7 +309,6 @@ def main():
             BATCH_file.append(f"sbatch {file_name}")
 
     if run_parameters["sbatch"]:
-
         print("*" * 80)
         BATCH_file.append("\n")
         bash_script_name = f"batch_script_{run_parameters['dataset']}.bash"

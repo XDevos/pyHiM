@@ -72,26 +72,33 @@ def parseArguments():
         p["input"] = args.input
     else:
         p["input"] = None
-    
+
     p["trace_files"] = []
     if args.pipe:
         p["pipe"] = True
-        if select.select([sys.stdin,], [], [], 0.0)[0]:
+        if select.select(
+            [
+                sys.stdin,
+            ],
+            [],
+            [],
+            0.0,
+        )[0]:
             p["trace_files"] = [line.rstrip("\n") for line in sys.stdin]
         else:
             print("Nothing in stdin")
     else:
         p["pipe"] = False
         p["trace_files"] = [p["input"]]
-        
+
     return p
 
 
 def get_xyz_statistics(trace, output_filename="test_coor.png"):
     """
-    Function that calculates the 
-        - distribution of localizations in x y z 
-    
+    Function that calculates the
+        - distribution of localizations in x y z
+
     Parameters
     ----------
     trace : TYPE
@@ -104,7 +111,7 @@ def get_xyz_statistics(trace, output_filename="test_coor.png"):
     None.
 
     """
-    coords = ['x','y', 'z']
+    coords = ["x", "y", "z"]
 
     fig = plt.figure(constrained_layout=True)
     im_size, number_plots = 10, 3
@@ -115,7 +122,7 @@ def get_xyz_statistics(trace, output_filename="test_coor.png"):
     for axis, coor in zip(axes, coords):
         print(f"$ processing coordinate: {coor}")
         coordinates = trace[coor].data
-        axis.hist(coordinates, alpha=0.3, bins = 20)
+        axis.hist(coordinates, alpha=0.3, bins=20)
         axis.set_xlabel(coor)
         axis.set_ylabel("counts")
         axis.set_title(
@@ -130,11 +137,11 @@ def get_xyz_statistics(trace, output_filename="test_coor.png"):
 
 def get_barcode_statistics(trace, output_filename="test_barcodes.png"):
     """
-    Function that calculates the 
+    Function that calculates the
         - number of barcodes per trace
         - number of unique barcodes per trace
         - number of repeated barcodes per trace
-    
+
     Parameters
     ----------
     trace : TYPE
@@ -244,7 +251,6 @@ def process_traces(trace_files=list()):
     """
 
     if len(trace_files) > 0:
-    
         print(
             "\n{} trace files to process= {}".format(
                 len(trace_files), "\n".join(map(str, trace_files))
@@ -253,7 +259,6 @@ def process_traces(trace_files=list()):
 
         # iterates over traces in folder
         for trace_file in trace_files:
-
             trace = ChromatinTraceTable()
             trace.initialize()
 
@@ -268,7 +273,10 @@ def process_traces(trace_files=list()):
             analyze_trace(trace, trace_file)
 
     else:
-        print("! Error: did not find any trace file to analyze. Please provide one using --input or --pipe.")
+        print(
+            "! Error: did not find any trace file to analyze. Please provide one using --input or --pipe."
+        )
+
 
 # =============================================================================
 # MAIN

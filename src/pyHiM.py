@@ -17,6 +17,7 @@ __version__ = "0.7.2"
 
 import os
 import sys
+
 # to remove in a future version
 import warnings
 from datetime import datetime
@@ -29,7 +30,6 @@ from fileProcessing.fileManagement import Parameters, print_log
 warnings.filterwarnings("ignore")
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-
 
 
 # =============================================================================
@@ -57,13 +57,12 @@ def main(command_line_arguments=None):
     print_log(f"$ labels to process: {labels}\n")
 
     for label in labels:
-
         # sets parameters
         current_param = Parameters(
             root_folder=run_parameters["rootFolder"],
             label=label,
             file_name="infoList.json",
-            stardist_basename = run_parameters["stardist_basename"],
+            stardist_basename=run_parameters["stardist_basename"],
         )
 
         print_log(
@@ -144,7 +143,7 @@ def main(command_line_arguments=None):
 
 
 if __name__ == "__main__":
-    if apifish.__version__ < "0.6.4dev" :
+    if apifish.__version__ < "0.6.4dev":
         sys.exit("ERROR: Please update apifish (git checkout development && git pull)")
     else:
         main()

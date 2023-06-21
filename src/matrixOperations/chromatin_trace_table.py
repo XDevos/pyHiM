@@ -25,8 +25,11 @@ from astropy.table import Table, vstack
 from stardist import random_label_cmap
 
 from fileProcessing.fileManagement import print_log
-from imageProcessing.localization_table import (build_color_dict, decode_rois,
-                                                plots_localization_projection)
+from imageProcessing.localization_table import (
+    build_color_dict,
+    decode_rois,
+    plots_localization_projection,
+)
 
 lbl_cmap = random_label_cmap()
 font = {"weight": "normal", "size": 18}
@@ -160,7 +163,7 @@ class ChromatinTraceTable:
 
         self.data = vstack([self.data, table])
 
-    def filter_traces_by_coordinate(self, coor = 'z', coor_min = 0., coor_max = np.inf):
+    def filter_traces_by_coordinate(self, coor="z", coor_min=0.0, coor_max=np.inf):
         """
         This function will remove the spots that are outside coordinate limits
 
@@ -180,44 +183,42 @@ class ChromatinTraceTable:
         """
         trace_table = self.data
 
-        if len(trace_table)>0:
-        
+        if len(trace_table) > 0:
             # indexes trace file
             trace_table_indexed = trace_table.group_by("Trace_ID")
-    
+
             # iterates over traces
             print(f"\n$ Will keep localizations with {coor_min} < {coor} < {coor_max}.")
             print(
                 f"$ Number of original spots / traces: {len(trace_table)} / {len(trace_table_indexed.groups)}"
             )
-    
-            coordinates=[]
+
+            coordinates = []
             rows_to_remove = []
             for idx, row in enumerate(trace_table):
                 coordinate = float(row[coor])
-    
+
                 if coordinate < coor_min or coordinate > coor_max:
                     rows_to_remove.append(idx)
                     # coordinates.append(coordinate)
-    
+
             print(f"$ Number of spots to remove: {len(rows_to_remove)}")
-    
+
             trace_table.remove_rows(rows_to_remove)
-    
+
             if len(trace_table) > 0:
                 trace_table_indexed = trace_table.group_by("Trace_ID")
                 number_traces_left = len(trace_table_indexed.groups)
             else:
                 number_traces_left = 0
-    
+
             print(
                 f"$ Number of spots / traces left: {len(trace_table)} / {number_traces_left}"
             )
-            
+
         else:
             print("! Error: you are trying to filter an empty trace table!")
         self.data = trace_table
-
 
     def filter_traces_by_n(self, minimum_number_barcodes=2):
         """
@@ -251,7 +252,6 @@ class ChromatinTraceTable:
         barcodes_to_remove = []
 
         for idx, trace in enumerate(trace_table_indexed.groups):
-
             number_unique_barcodes = len(list(set(trace["Barcode #"].data)))
 
             if number_unique_barcodes < minimum_number_barcodes:
@@ -286,9 +286,8 @@ class ChromatinTraceTable:
         self.data = trace_table
 
     def plots_traces(
-        self, filename_list, masks=np.zeros((2048, 2048)), pixel_size=[.1, .1, .25]
+        self, filename_list, masks=np.zeros((2048, 2048)), pixel_size=[0.1, 0.1, 0.25]
     ):
-
         """
         This function plots 3 subplots (xy, xz, yz) with the localizations.
         One figure is produced per ROI.
@@ -306,7 +305,6 @@ class ChromatinTraceTable:
         data_indexed, number_rois = decode_rois(data)
 
         for i_roi in range(number_rois):
-
             # creates sub Table for this ROI
             data_roi = data_indexed.groups[i_roi]
             n_roi = data_roi["ROI #"][0]
@@ -337,7 +335,9 @@ class ChromatinTraceTable:
             ax[0].imshow(masks, cmap=lbl_cmap, alpha=0.3)
 
             # makes plot
-            plots_localization_projection(x/pixel_size[0], y/pixel_size[1], ax[0], colors, titles[0])
+            plots_localization_projection(
+                x / pixel_size[0], y / pixel_size[1], ax[0], colors, titles[0]
+            )
             plots_localization_projection(x, z, ax[1], colors, titles[1])
             plots_localization_projection(y, z, ax[2], colors, titles[2])
 

@@ -32,7 +32,6 @@ from fileProcessing.fileManagement import Folders, Parameters
 
 
 def main():
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-F", "--rootFolder", help="Folder with images, default: .")
     parser.add_argument(
@@ -82,7 +81,6 @@ def main():
     data_folder = Folders(current_param.param_dict["rootFolder"])
 
     for current_folder in data_folder.list_folders:
-
         folders_to_remove = []
         folders_to_remove.append(
             current_folder + os.sep + current_param.param_dict["zProject"]["folder"]

@@ -11,14 +11,14 @@ Created on Mon Feb  7 16:45:44 2022
 
 import glob
 import os
+
 # to remove in a future version
 import warnings
 
 import numpy as np
 from tqdm import trange
 
-from fileProcessing.fileManagement import (Folders, print_log,
-                                           write_string_to_file)
+from fileProcessing.fileManagement import Folders, print_log, write_string_to_file
 from imageProcessing.localization_table import LocalizationTable
 
 warnings.filterwarnings("ignore")
@@ -129,7 +129,6 @@ class FilterLocalizations:
         n_barcodes = len(barcode_map)
         print(f"$ Minimum flux: {self.flux_min}")
         for i in trange(n_barcodes):  # i is the index of the barcode in barcode_map_roi
-
             # [filters barcode localizations either by]
             keep_quality = self.filter_localizations__quality(barcode_map, i)
 
@@ -212,9 +211,7 @@ class FilterLocalizations:
             ]
 
             if len(files) > 0:
-
                 for file in files:
-
                     if "3D" in os.path.basename(file):
                         self.ndims = 3
                     else:
@@ -267,7 +264,6 @@ class FilterLocalizations:
 
 
 def get_file_table_new_name(file):
-
     existing_versions = glob.glob(file.split(".")[0] + "_version_*.dat")
 
     if len(existing_versions) < 1:
